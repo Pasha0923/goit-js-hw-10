@@ -10,19 +10,19 @@ const minute = document.querySelector('span[data-minutes]');
 const second = document.querySelector('span[data-seconds]');
 
 btnStart.disabled = true;
-let userSelectedDate = '';
+let userSelectedDate;
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0] < new Date()) {
+    if (selectedDates[0] <= new Date()) {
+      btnStart.disabled = true;
       iziToast.error({
         title: 'Error',
         message: 'Please choose a date in the future',
       });
-      btnStart.disabled = true;
     } else {
       userSelectedDate = selectedDates[0];
       btnStart.disabled = false;
@@ -59,6 +59,8 @@ function addLeadingZero(value) {
   return value.toString().padStart(2, '0');
 }
 function startTimer() {
+  btnStart.disabled = true;
+  input.disabled = true;
   const selectedDateTime = userSelectedDate.getTime(); // отримали поточний час  обраної дати
   const intervalId = setInterval(() => {
     const currentDate = new Date(); // отримали поточний час на момент ініціалізації
@@ -68,10 +70,10 @@ function startTimer() {
     if (diff <= 0) {
       clearInterval(intervalId);
 
-      // day.textContent = '00';
-      // hour.textContent = '00';
-      // minute.textContent = '00';
-      // second.textContent = '00';
+      day.textContent = '00';
+      hour.textContent = '00';
+      minute.textContent = '00';
+      second.textContent = '00';
     } else {
       day.textContent = addLeadingZero(days);
       hour.textContent = addLeadingZero(hours);
